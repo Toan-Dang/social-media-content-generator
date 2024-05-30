@@ -7,7 +7,7 @@ const Dashboard = () => {
   const [activeTab, setActiveTab] = useState('services');
 
   return (
-    <div className="dashboard">
+    <div className="dashboard-container">
       <div className="sidebar">
         <div className="sidebar-header">Skipli AI</div>
         <button
