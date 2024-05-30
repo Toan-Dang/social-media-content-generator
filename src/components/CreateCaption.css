@@ -1,91 +1,102 @@
 .create-caption {
-    text-align: center;
-    padding: 20px;
-  }
-  
-  .create-caption h2 {
-    margin-bottom: 20px;
-  }
-  
-  .create-caption .form-group {
-    margin: 20px 0;
-  }
-  
-  .create-caption label {
-    display: block;
-    margin-bottom: 8px;
-    font-weight: bold;
-  }
-  
-  .create-caption input {
-    width: 100%;
-    padding: 10px;
-    margin-bottom: 20px;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    box-sizing: border-box;
-  }
-  
-  .create-caption .generate-button,
-  .create-caption .back-button {
-    padding: 10px 20px;
-    background-color: #007bff;
-    color: #fff;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-  }
-  
-  .create-caption .generate-button:hover,
-  .create-caption .back-button:hover {
-    background-color: #0056b3;
-  }
-  
-  .captions {
-    margin-top: 40px;
-  }
-  
-  .captions h3 {
-    margin-bottom: 20px;
-  }
-  
-  .caption {
-    background-color: #fff;
-    border: 1px solid #ddd;
-    padding: 20px;
-    margin: 10px 0;
-    text-align: left;
-    border-radius: 5px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-  
-  .caption p {
-    flex: 1;
-    margin-right: 20px;
-  }
-  
-  .caption .buttons {
-    display: flex;
-  }
-  
-  .share-button,
-  .save-button {
-    background-color: #007bff;
-    color: #fff;
-    border: none;
-    padding: 5px 10px;
-    cursor: pointer;
-    border-radius: 5px;
-    font-size: 14px;
-  }
-  
-  .share-button:hover,
-  .save-button:hover {
-    background-color: #0056b3;
-  }
-  
-  .save-button {
-    margin-left: 10px;
-  }
+  text-align: center;
+  padding: 20px;
+}
+
+.create-caption h2 {
+  margin-bottom: 20px;
+}
+
+.create-caption .form-group {
+  margin: 20px 0;
+}
+
+.create-caption label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: bold;
+}
+
+.create-caption input {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 20px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  box-sizing: border-box;
+}
+
+.create-caption .generate-button,
+.create-caption .back-button {
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-right: 10px;
+}
+
+.create-caption .generate-button:hover,
+.create-caption .back-button:hover {
+  background-color: #0056b3;
+}
+
+.create-caption .buttons {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.create-caption .buttons .generate-button {
+  margin-right: 10px;
+}
+
+.captions {
+  margin-top: 40px;
+}
+
+.captions h3 {
+  margin-bottom: 20px;
+}
+
+.caption {
+  background-color: #fff;
+  border: 1px solid #ddd;
+  padding: 20px;
+  margin: 10px 0;
+  text-align: left;
+  border-radius: 5px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.caption p {
+  flex: 1;
+  margin-right: 20px;
+}
+
+.caption .buttons {
+  display: flex;
+}
+
+.share-button,
+.save-button {
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  padding: 5px 10px;
+  cursor: pointer;
+  border-radius: 5px;
+  font-size: 14px;
+}
+
+.share-button:hover,
+.save-button:hover {
+  background-color: #0056b3;
+}
+
+.save-button {
+  margin-left: 10px;
+}

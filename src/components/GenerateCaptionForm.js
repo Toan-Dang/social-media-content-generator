@@ -47,12 +47,14 @@ const GenerateCaptionForm = ({ postType, setSelectedPostType }) => {
           <option value="Inspirational">Inspirational</option>
         </select>
       </div>
-      <button className="generate-button" onClick={handleGenerateCaption}>
-        Generate caption
-      </button>
-      <button className="back-button" onClick={() => setSelectedPostType(null)}>
-        Back
-      </button>
+      <div className="buttons">
+        <button className="generate-button" onClick={handleGenerateCaption}>
+          Generate caption
+        </button>
+        <button className="back-button" onClick={() => setSelectedPostType(null)}>
+          Back
+        </button>
+      </div>
 
       {state.generatedCaptions.length > 0 && (
         <div className="captions">

@@ -41,12 +41,14 @@ const GetInspired = ({ setView }) => {
                   placeholder="Enter a topic"
                 />
               </div>
-              <button className="generate-button" onClick={handleGenerateIdeas}>
-                Generate ideas
-              </button>
-              <button className="back-button" onClick={handleBack}>
-                Back
-              </button>
+              <div className="buttons">
+                <button className="generate-button" onClick={handleGenerateIdeas}>
+                  Generate ideas
+                </button>
+                <button className="back-button" onClick={handleBack}>
+                  Back
+                </button>
+              </div>
             </>
           ) : (
             <>

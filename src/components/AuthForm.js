@@ -33,7 +33,7 @@ const AuthForm = () => {
       {step === 1 ? (
         <div className="auth-form">
           <h2>Welcome to Skipli AI</h2>
-          <p>Enter a mobile phone number that you have access to. This number will be used to log in to SkipliAI.</p>
+          <p>Enter a mobile phone number that you have access to.</p>
           <input
             type="text"
             value={state.phoneNumber}

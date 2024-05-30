@@ -37,12 +37,14 @@ const CreateCaption = ({ idea, setSelectedIdea }) => {
         value={idea}
         readOnly
       />
-      <button className="generate-button" onClick={handleCreateCaption}>
-        Create caption
-      </button>
-      <button className="back-button" onClick={handleBack}>
-        Back
-      </button>
+      <div className="buttons">
+        <button className="generate-button" onClick={handleCreateCaption}>
+          Create caption
+        </button>
+        <button className="back-button" onClick={handleBack}>
+          Back
+        </button>
+      </div>
 
       {state.generatedCaptions.length > 0 && (
         <div className="captions">

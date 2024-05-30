@@ -15,7 +15,7 @@ label {
 
 input,
 select {
-  width: 300px;
+  width: 100%;
   padding: 10px;
   margin: 0 auto;
   display: block;
@@ -56,19 +56,16 @@ select {
   text-align: left;
   border-radius: 5px;
   display: flex;
-  flex-direction: column;
   justify-content: space-between;
-  position: relative;
+  align-items: center;
 }
 
 .caption p {
-  margin-bottom: 40px;
+  flex: 1;
+  margin-right: 20px;
 }
 
 .caption .buttons {
-  position: absolute;
-  right: 20px;
-  bottom: 20px;
   display: flex;
 }
 
@@ -90,4 +87,14 @@ select {
 
 .save-button {
   margin-left: 10px;
+}
+
+.buttons {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.buttons .generate-button {
+  margin-right: 10px;
 }
