@@ -1,0 +1,46 @@
+.start-from-scratch {
+  text-align: center;
+  padding: 20px;
+}
+
+.post-types {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.post-type-button {
+  background-color: #fff;
+  color: #333;
+  border: 1px solid #ddd;
+  padding: 20px;
+  margin: 10px 0;
+  cursor: pointer;
+  border-radius: 5px;
+  font-size: 16px;
+  width: 300px;
+  text-align: left;
+}
+
+.post-type-button i {
+  margin-right: 10px;
+}
+
+.post-type-button {
+  background-color: #f0f0f0;
+}
+
+.back-button {
+  background-color: #007bff;
+  color: #fff;
+  border: 1px solid #007bff;
+  padding: 10px 20px;
+  margin-top: 20px;
+  cursor: pointer;
+  border-radius: 5px;
+  font-size: 16px;
+}
+
+.back-button {
+  background-color: #0056b3;
+}

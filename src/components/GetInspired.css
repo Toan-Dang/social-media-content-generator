@@ -1,0 +1,66 @@
+.get-inspired {
+    text-align: center;
+    padding: 20px;
+  }
+  
+  .get-inspired h2 {
+    margin-bottom: 20px;
+  }
+  
+  .get-inspired p {
+    margin-bottom: 20px;
+    color: #666;
+  }
+  
+  .get-inspired .form-group {
+    margin: 20px 0;
+  }
+  
+  .get-inspired label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: bold;
+  }
+  
+  .get-inspired input {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 20px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    box-sizing: border-box;
+  }
+  
+  .get-inspired .generate-button,
+  .get-inspired .back-button {
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .get-inspired .generate-button:hover,
+  .get-inspired .back-button:hover {
+    background-color: #0056b3;
+  }
+  
+  .get-inspired .ideas-list {
+    margin-top: 40px;
+  }
+  
+  .get-inspired .idea-item {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    padding: 20px;
+    margin: 10px 0;
+    text-align: left;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  .get-inspired .idea-item:hover {
+    background-color: #f0f0f0;
+  }
