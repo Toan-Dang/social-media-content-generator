@@ -1,51 +1,40 @@
 import React, { useEffect, useContext } from 'react';
-import axios from 'axios';
 import { GlobalStateContext } from '../context/GlobalState';
 import './Profile.css';
 
 const Profile = () => {
-  const { state, setUserCaptions } = useContext(GlobalStateContext);
+  const { state, getUserGeneratedContents, unsaveContent } = useContext(GlobalStateContext);
 
   useEffect(() => {
-    const fetchCaptions = async () => {
-      try {
-        const response = await axios.get('/api/get-captions', {
-          params: { phoneNumber: state.phoneNumber },
-        });
-        setUserCaptions(response.data.captions);
-      } catch (error) {
-        console.error(error);
-      }
-    };
-
-    fetchCaptions();
-  }, [setUserCaptions, state.phoneNumber]);
+    getUserGeneratedContents(state.phoneNumber);
+  }, [state.phoneNumber, getUserGeneratedContents]);
 
   const handleUnsave = async (captionId) => {
-    try {
-      await axios.delete(`/api/unsave-caption/${captionId}`);
-      setUserCaptions(state.userCaptions.filter((caption) => caption.id !== captionId));
-    } catch (error) {
-      console.error(error);
+    const success = await unsaveContent(captionId);
+    if (success) {
+      alert('Content unsaved successfully!');
+    } else {
+      alert('Failed to unsave content.');
     }
-  };
-
-  const shareCaption = (caption) => {
-    // Share caption to Facebook or email
   };
 
   return (
     <div className="profile">
-      <h2>Your Captions</h2>
-      <div className="captions">
-        {state.userCaptions.map((caption) => (
-          <div key={caption.id} className="caption">
-            <p>{caption.text}</p>
-            <button onClick={() => handleUnsave(caption.id)}>Unsave</button>
-            <button onClick={() => shareCaption(caption)}>Share</button>
-          </div>
-        ))}
-      </div>
+      <h2>Saved Content</h2>
+      {state.userCaptions.map((content, index) => (
+        <div key={index} className="saved-content">
+          <h3>{content.topic}</h3>
+          {content.captions.map((caption, idx) => (
+            <div key={idx} className="caption">
+              <p>{caption.text}</p>
+              <div className="buttons">
+                <button className="share-button">Share</button>
+                <button className="unsave-button" onClick={() => handleUnsave(caption.id)}>Unsave</button>
+              </div>
+            </div>
+          ))}
+        </div>
+      ))}
     </div>
   );
 };

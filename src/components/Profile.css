@@ -1,34 +1,61 @@
+/* src/components/Profile.css */
+
 .profile {
-    padding: 20px;
-  }
-  
-  .captions {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-  
-  .caption {
-    background-color: #fff;
-    border: 1px solid #ddd;
-    padding: 20px;
-    margin: 10px 0;
-    width: 100%;
-    max-width: 500px;
-    text-align: center;
-    border-radius: 5px;
-  }
-  
-  .caption button {
-    background-color: #007bff;
-    color: #fff;
-    border: none;
-    padding: 5px 10px;
-    margin: 5px;
-    cursor: pointer;
-    border-radius: 5px;
-  }
-  
-  .caption button:hover {
-    background-color: #0056b3;
-  }
+  padding: 20px;
+  background-color: #f4f4f4;
+  min-height: 100vh;
+}
+
+.profile h2 {
+  margin-bottom: 20px;
+}
+
+.saved-content {
+  margin-bottom: 30px;
+}
+
+.saved-content h3 {
+  margin-bottom: 10px;
+  font-size: 1.2em;
+}
+
+.caption {
+  background-color: #fff;
+  border: 1px solid #ddd;
+  padding: 20px;
+  margin: 10px 0;
+  text-align: left;
+  border-radius: 5px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.caption p {
+  flex: 1;
+  margin-right: 20px;
+}
+
+.buttons {
+  display: flex;
+}
+
+.share-button,
+.unsave-button {
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  padding: 5px 10px;
+  cursor: pointer;
+  border-radius: 5px;
+  font-size: 14px;
+}
+
+.share-button:hover,
+.unsave-button:hover {
+  background-color: #0056b3;
+}
+
+.unsave-button {
+  margin-left: 10px;
+}
