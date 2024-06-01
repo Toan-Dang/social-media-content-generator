@@ -3,11 +3,16 @@ import './CreateCaption.css';
 import { GlobalStateContext } from '../context/GlobalState';
 
 const CreateCaption = ({ idea, setSelectedIdea }) => {
-  const [caption, setCaption] = useState('');
-  const { state, generatePostCaptions, saveGeneratedContent, removeGeneratedCaption } = useContext(GlobalStateContext);
+  const [captions, setCaptions] = useState([]);
+    const { state, createCaptionsFromIdeas , saveGeneratedContent, removeGeneratedCaption } = useContext(GlobalStateContext);
 
   const handleCreateCaption = async () => {
-    await generatePostCaptions('SocialMedia', idea, 'Friendly');
+    try {
+      const generatedCaptions = await createCaptionsFromIdeas(state.selectedIdea);
+      setCaptions(generatedCaptions);
+    } catch (error) {
+      console.error('Error creating captions from idea:', error);
+    }
   };
 
   const handleSave = async (caption) => {
