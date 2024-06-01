@@ -1,15 +1,13 @@
-import React, { useState, useContext } from 'react';
+import React, { useContext } from 'react';
 import './CreateCaption.css';
 import { GlobalStateContext } from '../context/GlobalState';
 
 const CreateCaption = ({ idea, setSelectedIdea }) => {
-  const [captions, setCaptions] = useState([]);
-    const { state, createCaptionsFromIdeas , saveGeneratedContent, removeGeneratedCaption } = useContext(GlobalStateContext);
+  const { state, createCaptionsFromIdeas , saveGeneratedContent, removeGeneratedCaption } = useContext(GlobalStateContext);
 
   const handleCreateCaption = async () => {
     try {
-      const generatedCaptions = await createCaptionsFromIdeas(state.selectedIdea);
-      setCaptions(generatedCaptions);
+      await createCaptionsFromIdeas(idea);
     } catch (error) {
       console.error('Error creating captions from idea:', error);
     }
@@ -51,10 +49,10 @@ const CreateCaption = ({ idea, setSelectedIdea }) => {
         </button>
       </div>
 
-      {state.generatedCaptions.length > 0 && (
+      {state.generatedIdeasCaptions.length > 0 && (
         <div className="captions">
           <h3>Captions created for you</h3>
-          {state.generatedCaptions.map((caption, index) => (
+          {state.generatedIdeasCaptions.map((caption, index) => (
             <div key={index} className="caption">
               <p>{caption}</p>
               <div className="buttons">

@@ -1,13 +1,18 @@
-import React, { useEffect, useContext } from 'react';
+import React, { useEffect, useContext, useCallback } from 'react';
 import { GlobalStateContext } from '../context/GlobalState';
 import './Profile.css';
 
 const Profile = () => {
   const { state, getUserGeneratedContents, unsaveContent } = useContext(GlobalStateContext);
 
+  // Wrap the getUserGeneratedContents function in useCallback
+  const fetchUserGeneratedContents = useCallback(() => {
+    getUserGeneratedContents();
+  }, [getUserGeneratedContents]);
+
   useEffect(() => {
-    getUserGeneratedContents(state.phoneNumber);
-  }, [state.phoneNumber, getUserGeneratedContents]);
+    fetchUserGeneratedContents();
+  }, [fetchUserGeneratedContents]);
 
   const handleUnsave = async (captionId) => {
     const success = await unsaveContent(captionId);
@@ -21,7 +26,7 @@ const Profile = () => {
   return (
     <div className="profile">
       <h2>Saved Content</h2>
-      {state.userCaptions.map((content, index) => (
+      {state.savedContents.map((content, index) => (
         <div key={index} className="saved-content">
           <h3>{content.topic}</h3>
           {content.captions.map((caption, idx) => (

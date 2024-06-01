@@ -7,6 +7,7 @@ const initialState = {
   userCaptions: [],
   generatedCaptions: [],
   generatedIdeas: [],
+  generatedIdeasCaptions: [],
   savedContents: [],
   selectedIdea: '',
 };
@@ -25,6 +26,8 @@ const reducer = (state, action) => {
       return { ...state, generatedCaptions: action.payload };
     case 'SET_GENERATED_IDEAS':
       return { ...state, generatedIdeas: action.payload };
+    case 'SET_GENERATED_IDEAS_CAPTIONS':
+      return { ...state, generatedIdeasCaptions: action.payload };
     case 'RESET_GENERATED_IDEAS':
       return { ...state, generatedIdeas: [] };
     case 'REMOVE_GENERATED_CAPTION':
@@ -72,6 +75,10 @@ const GlobalStateProvider = ({ children }) => {
     dispatch({ type: 'SET_GENERATED_IDEAS', payload: ideas });
   };
 
+  const setGeneratedIdeasCaption = (captions) => {
+    dispatch({ type: 'SET_GENERATED_IDEAS_CAPTIONS', payload: captions });
+  };
+
   const resetGeneratedIdeas = () => {
     dispatch({ type: 'RESET_GENERATED_IDEAS' });
   };
@@ -82,13 +89,11 @@ const GlobalStateProvider = ({ children }) => {
 
   const sendAccessCode = async (phoneNumber) => {
     try {
-      // const response = await axios.post('/api/send-access-code', { phoneNumber });
-      // if (response.status === 200) {
-      //   setPhoneNumber(phoneNumber);
-      //   return true;
-      // }
-      setPhoneNumber(phoneNumber);
-      return true;
+      const response = await axios.post('http://127.0.0.1:5001/content-generator-98bba/us-central1/api/send-access-code', { phone_number: phoneNumber });
+      if (response.status === 200) {
+        setPhoneNumber(phoneNumber);
+        return true;
+      }
     } catch (error) {
       console.error(error);
       return false;
@@ -97,14 +102,12 @@ const GlobalStateProvider = ({ children }) => {
 
   const verifyAccessCode = async (phoneNumber, accessCode) => {
     try {
-      // const response = await axios.post('/api/verify-access-code', { phoneNumber, accessCode });
-      // if (response.status === 200) {
-      //   setAuthenticated(true);
-      //   localStorage.setItem('phoneNumber', phoneNumber);
-      //   return true;
-      // }
-      setAuthenticated(true);
-      localStorage.setItem('phoneNumber', phoneNumber);
+      const response = await axios.post('http://127.0.0.1:5001/content-generator-98bba/us-central1/api/verify-access-code', { phone_number: phoneNumber, access_code: accessCode });
+      if (response.status === 200) {
+        setAuthenticated(true);
+        localStorage.setItem('phoneNumber', phoneNumber);
+        return true;
+      }
       return true;
     } catch (error) {
       console.error(error);
@@ -114,13 +117,13 @@ const GlobalStateProvider = ({ children }) => {
 
   const generatePostCaptions = async (socialNetwork, subject, tone) => {
     try {
-      const response = await axios.post('/api/GeneratePostCaptions', {
+      const response = await axios.post('http://127.0.0.1:5001/content-generator-98bba/us-central1/api/GeneratePostCaptions', {
         socialNetwork,
         subject,
         tone,
       });
       if (response.status === 200) {
-        setGeneratedCaptions(response.data.captions);
+        setGeneratedCaptions(response.data.data.captions);
         return true;
       }
     } catch (error) {
@@ -131,11 +134,11 @@ const GlobalStateProvider = ({ children }) => {
 
   const generatePostIdeas = async (topic) => {
     try {
-      const response = await axios.post('/api/GeneratePostIdeas', {
+      const response = await axios.post('http://127.0.0.1:5001/content-generator-98bba/us-central1/api/GeneratePostIdeas', {
         topic,
       });
       if (response.status === 200) {
-        setGeneratedIdeas(response.data.ideas);
+        setGeneratedIdeas(response.data.data.ideas);
         return true;
       }
     } catch (error) {
@@ -144,26 +147,43 @@ const GlobalStateProvider = ({ children }) => {
     }
   };
 
+  const createCaptionsFromIdeas = async (idea) => {
+    try {
+      const response = await axios.post('http://127.0.0.1:5001/content-generator-98bba/us-central1/api/CreateCaptionsFromIdeas', { idea });
+      if (response.status === 200) {
+        setGeneratedIdeasCaption(response.data.data.captions)
+        return true;
+      }
+    } catch (error) {
+      console.error('Error creating captions from idea:', error);
+      throw error;
+    }
+  };
+
   const saveGeneratedContent = async (topic, data) => {
     try {
-      const response = await axios.post('/api/SaveGeneratedContent', {
+      const phone_number = localStorage.getItem('phoneNumber');
+      const response = await axios.post('http://127.0.0.1:5001/content-generator-98bba/us-central1/api/SaveGeneratedContent', {
         topic,
         data,
-        phone_number: state.phoneNumber,
+        phone_number,
       });
-      return response.data.success;
+      if (response.data.success) {
+        dispatch({ type: 'REMOVE_GENERATED_CAPTION', payload: data });
+        return true;
+      }
     } catch (error) {
       console.error('Error saving content:', error);
       return false;
     }
   };
 
-  const getUserGeneratedContents = async (phoneNumber) => {
+  const getUserGeneratedContents = async () => {
     try {
-      const response = await axios.get('/api/GetUserGeneratedContents', {
-        params: { phone_number: phoneNumber },
-      });
-      dispatch({ type: 'SET_SAVED_CONTENTS', payload: response.data });
+      const phone_number = localStorage.getItem('phoneNumber');
+      const response = await axios.get(`http://127.0.0.1:5001/content-generator-98bba/us-central1/api/GetUserGeneratedContents/${phone_number}`);
+      console.log(response.data.data);
+      dispatch({ type: 'SET_SAVED_CONTENTS', payload: response.data.data });
     } catch (error) {
       console.error('Error fetching user generated contents:', error);
     }
@@ -171,7 +191,8 @@ const GlobalStateProvider = ({ children }) => {
 
   const unsaveContent = async (captionId) => {
     try {
-      const response = await axios.post('/api/UnSaveContent', { phone_number: state.phoneNumber, captionId });
+      const phone_number = localStorage.getItem('phoneNumber');
+      const response = await axios.post('http://127.0.0.1:5001/content-generator-98bba/us-central1/api/UnSaveContent', { phone_number, captionId });
       if (response.data.success) {
         dispatch({ type: 'REMOVE_SAVED_CONTENT', payload: captionId });
         return true;
@@ -180,18 +201,6 @@ const GlobalStateProvider = ({ children }) => {
     } catch (error) {
       console.error('Error unsaving content:', error);
       return false;
-    }
-  };
-
-  const createCaptionsFromIdeas = async (idea) => {
-    try {
-      const response = await axios.post('/api/CreateCaptionsFromIdeas', { idea });
-      if (response.status === 200) {
-        return response.data.captions;
-      }
-    } catch (error) {
-      console.error('Error creating captions from idea:', error);
-      throw error;
     }
   };
 
@@ -204,6 +213,7 @@ const GlobalStateProvider = ({ children }) => {
         setUserCaptions,
         setGeneratedCaptions,
         setGeneratedIdeas,
+        setGeneratedIdeasCaption,
         resetGeneratedIdeas,
         removeGeneratedCaption,
         sendAccessCode,
