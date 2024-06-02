@@ -1,18 +1,13 @@
-import React, { useEffect, useContext, useCallback } from 'react';
+import React, { useEffect, useContext } from 'react';
 import { GlobalStateContext } from '../context/GlobalState';
 import './Profile.css';
 
 const Profile = () => {
   const { state, getUserGeneratedContents, unsaveContent } = useContext(GlobalStateContext);
 
-  // Wrap the getUserGeneratedContents function in useCallback
-  const fetchUserGeneratedContents = useCallback(() => {
+  useEffect(() => {
     getUserGeneratedContents();
   }, [getUserGeneratedContents]);
-
-  useEffect(() => {
-    fetchUserGeneratedContents();
-  }, [fetchUserGeneratedContents]);
 
   const handleUnsave = async (captionId) => {
     const success = await unsaveContent(captionId);

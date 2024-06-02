@@ -1,4 +1,4 @@
-import React, { createContext, useReducer } from 'react';
+import React, { createContext, useReducer, useCallback } from 'react';
 import axios from 'axios';
 
 const initialState = {
@@ -178,7 +178,7 @@ const GlobalStateProvider = ({ children }) => {
     }
   };
 
-  const getUserGeneratedContents = async () => {
+  const getUserGeneratedContents = useCallback(async () => {
     try {
       const phone_number = localStorage.getItem('phoneNumber');
       const response = await axios.get(`http://127.0.0.1:5001/content-generator-98bba/us-central1/api/GetUserGeneratedContents/${phone_number}`);
@@ -187,7 +187,7 @@ const GlobalStateProvider = ({ children }) => {
     } catch (error) {
       console.error('Error fetching user generated contents:', error);
     }
-  };
+  }, []);
 
   const unsaveContent = async (captionId) => {
     try {
