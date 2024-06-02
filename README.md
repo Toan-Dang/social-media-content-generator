@@ -1,4 +1,4 @@
-# Backend Social Media Content Generator
+# Frontend Social Media Content Generator
 
 ## Importance
 I don't publicize my private keys for Firebase, Twilio, and Gemini API. 
