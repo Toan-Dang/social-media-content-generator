@@ -3,6 +3,8 @@
 ## Importance
 I don't publicize my private keys for Firebase, Twilio, and Gemini API. 
 
+Because my Twilio account is in Free Trial, I can't send access codes to any phone number except those verified in my account. Please use the access code 000000 to test.
+
 This is my BE repo link: [Backend Social Media Content Generator](https://github.com/Toan-Dang/Backend-social-media-content-generator)
 
 I have deployed my website and you can test via this link: [Content Generator](https://content-generator-98bba.web.app/)
