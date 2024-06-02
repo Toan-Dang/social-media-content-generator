@@ -1,19 +1,25 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import './CreateCaption.css';
 import { GlobalStateContext } from '../context/GlobalState';
 
 const CreateCaption = ({ idea, setSelectedIdea }) => {
-  const { state, createCaptionsFromIdeas , saveGeneratedContent, removeGeneratedCaption } = useContext(GlobalStateContext);
+  const { state, createCaptionsFromIdeas, saveGeneratedContent, removeGeneratedCaption, resetGeneratedIdeasCaptions } = useContext(GlobalStateContext);
+  const [loading, setLoading] = useState(false);
+  const [savingStatus, setSavingStatus] = useState({});
 
   const handleCreateCaption = async () => {
+    setLoading(true);
     try {
       await createCaptionsFromIdeas(idea);
+      setLoading(false);
     } catch (error) {
       console.error('Error creating captions from idea:', error);
+      setLoading(false);
     }
   };
 
   const handleSave = async (caption) => {
+    setSavingStatus((prevState) => ({ ...prevState, [caption]: true }));
     const success = await saveGeneratedContent(idea, caption);
     if (success) {
       removeGeneratedCaption(caption);
@@ -21,6 +27,7 @@ const CreateCaption = ({ idea, setSelectedIdea }) => {
     } else {
       alert('Failed to save caption.');
     }
+    setSavingStatus((prevState) => ({ ...prevState, [caption]: false }));
   };
 
   const handleShare = (caption) => {
@@ -29,6 +36,7 @@ const CreateCaption = ({ idea, setSelectedIdea }) => {
   };
 
   const handleBack = () => {
+    resetGeneratedIdeasCaptions();
     setSelectedIdea(null);
   };
 
@@ -41,8 +49,8 @@ const CreateCaption = ({ idea, setSelectedIdea }) => {
         readOnly
       />
       <div className="buttons">
-        <button className="generate-button" onClick={handleCreateCaption}>
-          Create caption
+        <button className="generate-button" onClick={handleCreateCaption} disabled={loading}>
+          {loading ? 'Generating...' : 'Generate Captions'}
         </button>
         <button className="back-button" onClick={handleBack}>
           Back
@@ -57,7 +65,13 @@ const CreateCaption = ({ idea, setSelectedIdea }) => {
               <p>{caption}</p>
               <div className="buttons">
                 <button className="share-button" onClick={() => handleShare(caption)}>Share</button>
-                <button className="save-button" onClick={() => handleSave(caption)}>Save</button>
+                <button
+                  className="save-button"
+                  onClick={() => handleSave(caption)}
+                  disabled={savingStatus[caption]}
+                >
+                  {savingStatus[caption] ? 'Saving...' : 'Save'}
+                </button>
               </div>
             </div>
           ))}

@@ -1,5 +1,5 @@
 import React, { createContext, useReducer, useCallback } from 'react';
-import axios from 'axios';
+import axiosInstance from '../Utils/axiosConfig';
 
 const initialState = {
   phoneNumber: '',
@@ -28,12 +28,21 @@ const reducer = (state, action) => {
       return { ...state, generatedIdeas: action.payload };
     case 'SET_GENERATED_IDEAS_CAPTIONS':
       return { ...state, generatedIdeasCaptions: action.payload };
+    case 'RESET_GENERATED_CAPTIONS':
+      return { ...state, generatedCaptions: [] };
     case 'RESET_GENERATED_IDEAS':
       return { ...state, generatedIdeas: [] };
+    case 'RESET_GENERATED_IDEAS_CAPTIONS':
+      return { ...state, generatedIdeasCaptions: [] };
     case 'REMOVE_GENERATED_CAPTION':
       return {
         ...state,
         generatedCaptions: state.generatedCaptions.filter((caption) => caption !== action.payload),
+      };
+    case 'REMOVE_GENERATED_IDEAS_CAPTION':
+      return {
+        ...state,
+        generatedIdeasCaptions: state.generatedIdeasCaptions.filter((caption) => caption !== action.payload),
       };
     case 'SET_SAVED_CONTENTS':
       return { ...state, savedContents: action.payload };
@@ -79,8 +88,16 @@ const GlobalStateProvider = ({ children }) => {
     dispatch({ type: 'SET_GENERATED_IDEAS_CAPTIONS', payload: captions });
   };
 
+  const resetGeneratedCaptions = () => {
+    dispatch({ type: 'RESET_GENERATED_CAPTIONS' });
+  };
+
   const resetGeneratedIdeas = () => {
     dispatch({ type: 'RESET_GENERATED_IDEAS' });
+  };
+
+  const resetGeneratedIdeasCaptions = () => {
+    dispatch({ type: 'RESET_GENERATED_IDEAS_CAPTION' });
   };
 
   const removeGeneratedCaption = (caption) => {
@@ -89,7 +106,7 @@ const GlobalStateProvider = ({ children }) => {
 
   const sendAccessCode = async (phoneNumber) => {
     try {
-      const response = await axios.post('http://127.0.0.1:5001/content-generator-98bba/us-central1/api/send-access-code', { phone_number: phoneNumber });
+      const response = await axiosInstance.post('/send-access-code', { phone_number: phoneNumber });
       if (response.status === 200) {
         setPhoneNumber(phoneNumber);
         return true;
@@ -102,7 +119,7 @@ const GlobalStateProvider = ({ children }) => {
 
   const verifyAccessCode = async (phoneNumber, accessCode) => {
     try {
-      const response = await axios.post('http://127.0.0.1:5001/content-generator-98bba/us-central1/api/verify-access-code', { phone_number: phoneNumber, access_code: accessCode });
+      const response = await axiosInstance.post('/verify-access-code', { phone_number: phoneNumber, access_code: accessCode });
       if (response.status === 200) {
         setAuthenticated(true);
         localStorage.setItem('phoneNumber', phoneNumber);
@@ -117,7 +134,7 @@ const GlobalStateProvider = ({ children }) => {
 
   const generatePostCaptions = async (socialNetwork, subject, tone) => {
     try {
-      const response = await axios.post('http://127.0.0.1:5001/content-generator-98bba/us-central1/api/GeneratePostCaptions', {
+      const response = await axiosInstance.post('/GeneratePostCaptions', {
         socialNetwork,
         subject,
         tone,
@@ -134,7 +151,7 @@ const GlobalStateProvider = ({ children }) => {
 
   const generatePostIdeas = async (topic) => {
     try {
-      const response = await axios.post('http://127.0.0.1:5001/content-generator-98bba/us-central1/api/GeneratePostIdeas', {
+      const response = await axiosInstance.post('/GeneratePostIdeas', {
         topic,
       });
       if (response.status === 200) {
@@ -149,7 +166,7 @@ const GlobalStateProvider = ({ children }) => {
 
   const createCaptionsFromIdeas = async (idea) => {
     try {
-      const response = await axios.post('http://127.0.0.1:5001/content-generator-98bba/us-central1/api/CreateCaptionsFromIdeas', { idea });
+      const response = await axiosInstance.post('/CreateCaptionsFromIdeas', { idea });
       if (response.status === 200) {
         setGeneratedIdeasCaption(response.data.data.captions)
         return true;
@@ -163,13 +180,14 @@ const GlobalStateProvider = ({ children }) => {
   const saveGeneratedContent = async (topic, data) => {
     try {
       const phone_number = localStorage.getItem('phoneNumber');
-      const response = await axios.post('http://127.0.0.1:5001/content-generator-98bba/us-central1/api/SaveGeneratedContent', {
+      const response = await axiosInstance.post('/SaveGeneratedContent', {
         topic,
         data,
         phone_number,
       });
       if (response.data.success) {
         dispatch({ type: 'REMOVE_GENERATED_CAPTION', payload: data });
+        dispatch({ type: 'REMOVE_GENERATED_IDEAS_CAPTION', payload: data });
         return true;
       }
     } catch (error) {
@@ -181,7 +199,7 @@ const GlobalStateProvider = ({ children }) => {
   const getUserGeneratedContents = useCallback(async () => {
     try {
       const phone_number = localStorage.getItem('phoneNumber');
-      const response = await axios.get(`http://127.0.0.1:5001/content-generator-98bba/us-central1/api/GetUserGeneratedContents/${phone_number}`);
+      const response = await axiosInstance.get(`/GetUserGeneratedContents/${phone_number}`);
       console.log(response.data.data);
       dispatch({ type: 'SET_SAVED_CONTENTS', payload: response.data.data });
     } catch (error) {
@@ -192,7 +210,7 @@ const GlobalStateProvider = ({ children }) => {
   const unsaveContent = async (captionId) => {
     try {
       const phone_number = localStorage.getItem('phoneNumber');
-      const response = await axios.post('http://127.0.0.1:5001/content-generator-98bba/us-central1/api/UnSaveContent', { phone_number, captionId });
+      const response = await axiosInstance.post('/UnSaveContent', { phone_number, captionId });
       if (response.data.success) {
         dispatch({ type: 'REMOVE_SAVED_CONTENT', payload: captionId });
         return true;
@@ -214,7 +232,9 @@ const GlobalStateProvider = ({ children }) => {
         setGeneratedCaptions,
         setGeneratedIdeas,
         setGeneratedIdeasCaption,
+        resetGeneratedCaptions,
         resetGeneratedIdeas,
+        resetGeneratedIdeasCaptions,
         removeGeneratedCaption,
         sendAccessCode,
         verifyAccessCode,

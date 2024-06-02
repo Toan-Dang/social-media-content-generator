@@ -5,13 +5,23 @@ import { GlobalStateContext } from '../context/GlobalState';
 const GenerateCaptionForm = ({ postType, setSelectedPostType }) => {
   const [topic, setTopic] = useState('');
   const [tone, setTone] = useState('Friendly');
-  const { state, generatePostCaptions, saveGeneratedContent, removeGeneratedCaption } = useContext(GlobalStateContext);
+  const { state, generatePostCaptions, saveGeneratedContent, removeGeneratedCaption, resetGeneratedCaptions } = useContext(GlobalStateContext);
+  const [loading, setLoading] = useState(false);
+  const [savingStatus, setSavingStatus] = useState({});
 
   const handleGenerateCaption = async () => {
+    setLoading(true);
     await generatePostCaptions(postType, topic, tone);
+    setLoading(false);
   };
 
+  const handleBackOption = () => {
+    resetGeneratedCaptions();
+    setSelectedPostType(null);
+  }
+
   const handleSave = async (caption) => {
+    setSavingStatus((prevState) => ({ ...prevState, [caption]: true }));
     const success = await saveGeneratedContent(topic, caption);
     if (success) {
       removeGeneratedCaption(caption);
@@ -19,10 +29,10 @@ const GenerateCaptionForm = ({ postType, setSelectedPostType }) => {
     } else {
       alert('Failed to save caption.');
     }
+    setSavingStatus((prevState) => ({ ...prevState, [caption]: false }));
   };
 
   const handleShare = (caption) => {
-    // Logic to share the caption to Facebook or via email
     alert('Sharing feature not implemented yet.');
   };
 
@@ -48,10 +58,10 @@ const GenerateCaptionForm = ({ postType, setSelectedPostType }) => {
         </select>
       </div>
       <div className="buttons">
-        <button className="generate-button" onClick={handleGenerateCaption}>
-          Generate caption
+        <button className="generate-button" onClick={handleGenerateCaption} disabled={loading}>
+          {loading ? 'Generating...' : 'Generate Captions'}
         </button>
-        <button className="back-button" onClick={() => setSelectedPostType(null)}>
+        <button className="back-button" onClick={handleBackOption}>
           Back
         </button>
       </div>
@@ -64,7 +74,13 @@ const GenerateCaptionForm = ({ postType, setSelectedPostType }) => {
               <p>{caption}</p>
               <div className="buttons">
                 <button className="share-button" onClick={() => handleShare(caption)}>Share</button>
-                <button className="save-button" onClick={() => handleSave(caption)}>Save</button>
+                <button
+                  className="save-button"
+                  onClick={() => handleSave(caption)}
+                  disabled={savingStatus[caption]}
+                >
+                  {savingStatus[caption] ? 'Saving...' : 'Save'}
+                </button>
               </div>
             </div>
           ))}

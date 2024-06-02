@@ -7,9 +7,12 @@ const GetInspired = ({ setView }) => {
   const [topic, setTopic] = useState('');
   const [selectedIdea, setSelectedIdea] = useState(null);
   const { state, generatePostIdeas, resetGeneratedIdeas } = useContext(GlobalStateContext);
+  const [loading, setLoading] = useState(false);
 
   const handleGenerateIdeas = async () => {
+    setLoading(true);
     await generatePostIdeas(topic);
+    setLoading(false);
   };
 
   const handleBack = () => {
@@ -42,8 +45,8 @@ const GetInspired = ({ setView }) => {
                 />
               </div>
               <div className="buttons">
-                <button className="generate-button" onClick={handleGenerateIdeas}>
-                  Generate ideas
+                <button className="generate-button" onClick={handleGenerateIdeas} disabled={loading}>
+                  {loading ? 'Generating...' : 'Generate Captions'}
                 </button>
                 <button className="back-button" onClick={handleBack}>
                   Back
