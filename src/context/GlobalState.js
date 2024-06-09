@@ -49,10 +49,14 @@ const reducer = (state, action) => {
     case 'REMOVE_SAVED_CONTENT':
       return {
         ...state,
-        savedContents: state.savedContents.map((content) => ({
-          ...content,
-          captions: content.captions.filter((caption) => caption.id !== action.payload),
-        })),
+        savedContents: state.savedContents.map((content) => {
+          const updatedCaptions = content.captions.filter((caption) => caption.id !== action.payload);
+          return {
+            ...content,
+            captions: updatedCaptions,
+            topic: updatedCaptions.length === 0 ? null : content.topic,
+          };
+        }),
       };
     case 'SET_SELECTED_IDEA':
       return { ...state, selectedIdea: action.payload };
