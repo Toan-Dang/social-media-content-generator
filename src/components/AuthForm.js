@@ -10,6 +10,10 @@ const AuthForm = () => {
   const navigate = useNavigate();
 
   const handlePhoneNumberSubmit = async () => {
+    if (!/^\d{1,15}$/.test(state.phoneNumber)) {
+      alert('Please enter a valid phone number');
+      return;
+    }
     const success = await sendAccessCode(state.phoneNumber);
     if (success) {
       setStep(2);
@@ -19,12 +23,30 @@ const AuthForm = () => {
   };
 
   const handleAccessCodeSubmit = async () => {
+    if (!/^\d{6}$/.test(accessCode)) {
+      alert('Please enter a valid access code');
+      return;
+    }
     const success = await verifyAccessCode(state.phoneNumber, accessCode);
     if (success) {
       alert('Access code validated successfully');
       navigate('/dashboard');
     } else {
       alert('Invalid access code');
+    }
+  };
+
+  const handlePhoneNumberChange = (e) => {
+    const value = e.target.value;
+    if (/^\d{0,15}$/.test(value)) {
+      setPhoneNumber(value);
+    }
+  };
+
+  const handleAccessCodeChange = (e) => {
+    const value = e.target.value;
+    if (/^\d{0,6}$/.test(value)) {
+      setAccessCode(value);
     }
   };
 
@@ -37,8 +59,9 @@ const AuthForm = () => {
           <input
             type="text"
             value={state.phoneNumber}
-            onChange={(e) => setPhoneNumber(e.target.value)}
+            onChange={handlePhoneNumberChange}
             placeholder="Phone Number"
+            required
           />
           <button onClick={handlePhoneNumberSubmit}>Send Verification Code</button>
         </div>
@@ -49,8 +72,9 @@ const AuthForm = () => {
           <input
             type="text"
             value={accessCode}
-            onChange={(e) => setAccessCode(e.target.value)}
+            onChange={handleAccessCodeChange}
             placeholder="Enter your code here"
+            required
           />
           <button onClick={handleAccessCodeSubmit}>Submit</button>
         </div>
